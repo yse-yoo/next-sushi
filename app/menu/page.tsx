@@ -7,10 +7,15 @@ import CategoryTabs from '@/components/CategoryTabs';
 import OrderList from '@/components/OrderList';
 import Modal from '@/components/Modal';
 
+type Category = {
+    id: number;
+    name: string;
+};
+
 export default function HomePage() {
-    const [categories, setCategories] = useState([]);
-    const [products, setProducts] = useState([]);
-    const [currentCategory, setCurrentCategory] = useState(null);
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [products, setProducts] = useState<any[]>([]);
+    const [currentCategory, setCurrentCategory] = useState<Category | null>(null);
     const [orders, setOrders] = useState([]);
     const [modalContent, setModalContent] = useState(null);
 
@@ -24,7 +29,10 @@ export default function HomePage() {
         })();
     }, []);
 
-    const filtered = products.filter(p => p.category_id === currentCategory?.id);
+    // console.log('Categories:', categories);
+    // console.log('Products:', products);
+    // console.log('Current Category:', currentCategory);
+    const filtered = (products ?? []).filter(p => p.category_id === currentCategory?.id);
 
     return (
         <main className="p-4">
