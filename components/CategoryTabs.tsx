@@ -1,9 +1,6 @@
 'use client';
 
-type Category = {
-    id: number;
-    name: string;
-};
+import { Category } from "@/types/Category";
 
 type Props = {
     categories: Category[];

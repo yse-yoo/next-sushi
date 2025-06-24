@@ -5,19 +5,17 @@ import { fetchCategories, fetchProducts } from '@/lib/api';
 import ProductCard from '@/components/ProductCard';
 import CategoryTabs from '@/components/CategoryTabs';
 import OrderList from '@/components/OrderList';
-import Modal from '@/components/Modal';
-
-type Category = {
-    id: number;
-    name: string;
-};
+import Modal from '@/components/OrderForm';
+import { Category } from '@/types/Category';
+import { Product } from '@/types/Product';
+import { Order } from '@/types/Order';
 
 export default function HomePage() {
     const [categories, setCategories] = useState<Category[]>([]);
     const [products, setProducts] = useState<any[]>([]);
     const [currentCategory, setCurrentCategory] = useState<Category | null>(null);
-    const [orders, setOrders] = useState([]);
-    const [modalContent, setModalContent] = useState(null);
+    const [orders, setOrders] = useState<Order[]>([]);
+    const [product, setProduct] = useState<Product>();
 
     useEffect(() => {
         (async () => {
@@ -25,14 +23,14 @@ export default function HomePage() {
             const { products } = await fetchProducts();
             setCategories(categories);
             setProducts(products);
-            setCurrentCategory(categories[0]);
+            setCurrentCategory(categories[0] || null);
         })();
     }, []);
 
-    // console.log('Categories:', categories);
-    // console.log('Products:', products);
-    // console.log('Current Category:', currentCategory);
-    const filtered = (products ?? []).filter(p => p.category_id === currentCategory?.id);
+    console.log('Categories:', categories);
+    console.log('Products:', products);
+    console.log('Current Category:', currentCategory);
+    const filtered = products.filter(p => p.category_id === currentCategory?.id);
 
     return (
         <main className="p-4">
@@ -48,13 +46,22 @@ export default function HomePage() {
                         <ProductCard
                             key={product.id}
                             product={product}
-                            onOrder={() => setModalContent(product)}
+                            onOrder={() => setProduct(product)}
                         />
                     ))}
                 </div>
                 <OrderList orders={orders} />
             </div>
-            <Modal product={modalContent} onClose={() => setModalContent(null)} />
+            {product && (
+                <Modal
+                    product={product}
+                    onClose={() => setProduct(undefined)}
+                    onConfirm={(order) => {
+                        setOrders(orders => [...orders, order]);
+                        setProduct(undefined);
+                    }}
+                />
+            )}
         </main>
     );
 }

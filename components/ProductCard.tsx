@@ -1,11 +1,6 @@
 'use client';
 
-type Product = {
-    id: number;
-    name: string;
-    image_path: string;
-    price: number;
-};
+import { Product } from "@/types/Product";
 
 type Props = {
     product: Product;
@@ -20,7 +15,7 @@ export default function ProductCard({ product, onOrder }: Props) {
             className="bg-white rounded shadow p-4 flex flex-col items-center cursor-pointer hover:shadow-lg transition"
             onClick={onOrder}
         >
-            <img src={product.image_path} alt={product.name} className="w-32 h-32 object-cover rounded mb-2" />
+            <img src={product.image_path} alt={product.name} className="w-32 object-cover rounded mb-2" />
             <h3 className="text-lg font-semibold">{product.name}</h3>
             <p className="text-sm text-gray-600 mb-2">
                 ¥{product.price}（税込¥{priceWithTax}）
