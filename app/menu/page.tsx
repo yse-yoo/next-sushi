@@ -12,6 +12,7 @@ import { Order } from '@/types/Order';
 import Link from 'next/link';
 import Image from 'next/image';
 import TitleLink from '@/components/TitleLink';
+import CheckoutForm from '@/components/CheckoutForm';
 
 export default function HomePage() {
     const [categories, setCategories] = useState<Category[]>([]);
@@ -19,6 +20,11 @@ export default function HomePage() {
     const [currentCategory, setCurrentCategory] = useState<Category | null>(null);
     const [orders, setOrders] = useState<Order[]>([]);
     const [product, setProduct] = useState<Product>();
+    const [showCheckout, setShowCheckout] = useState(false);
+
+    function calcTotal(orders: Order[]): number {
+        return orders.reduce((sum, order) => sum + (order.price * (order.quantity || 1)), 0);
+    }
 
     useEffect(() => {
         (async () => {
@@ -65,6 +71,18 @@ export default function HomePage() {
                     }}
                 />
             )}
+            {showCheckout && (
+                <CheckoutForm
+                    orders={orders}
+                    onClose={() => setShowCheckout(false)}
+                    onConfirm={() => {
+                        // 例: localStorage削除 or API呼び出し
+                        setOrders([]);
+                        setShowCheckout(false);
+                    }}
+                />
+            )}
+
         </main>
     );
 }
