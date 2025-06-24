@@ -9,6 +9,9 @@ import Modal from '@/components/OrderForm';
 import { Category } from '@/types/Category';
 import { Product } from '@/types/Product';
 import { Order } from '@/types/Order';
+import Link from 'next/link';
+import Image from 'next/image';
+import TitleLink from '@/components/TitleLink';
 
 export default function HomePage() {
     const [categories, setCategories] = useState<Category[]>([]);
@@ -34,7 +37,7 @@ export default function HomePage() {
 
     return (
         <main className="p-4">
-            <h1 className="text-2xl font-bold text-center mb-4">メニュー</h1>
+            <TitleLink />
             <CategoryTabs
                 categories={categories}
                 current={currentCategory}
